@@ -659,12 +659,12 @@
         }
 
         .btn-importar {
-            background: #6b46c1;
+            background: #2f855a;
             color: white;
         }
 
         .btn-importar:hover {
-            background: #553c9a;
+            background: #38a169;
         }
 
         .modal {
@@ -1720,7 +1720,13 @@
     function procesarCSV(file) {
         const reader = new FileReader();
         reader.onload = function(e) {
-            const text = e.target.result;
+            let text = e.target.result;
+
+            // Eliminar BOM si existe
+            if (text.charCodeAt(0) === 0xFEFF) {
+                text = text.slice(1);
+            }
+
             const lines = text.split('\n');
             const efectivos = [];
 
@@ -1728,29 +1734,82 @@
                 const line = lines[i].trim();
                 if (line === '') continue;
 
-                const parts = line.split(',');
-                if (parts.length < 8) continue;
+                // Parsear CSV correctamente (maneja comillas)
+                const parts = [];
+                let current = '';
+                let inQuotes = false;
 
-                const id = parseInt(parts[0].replace(/"/g, '')) || Date.now() + i;
-                const nombre = parts[1].replace(/"/g, '');
-                const dni = parts[2].replace(/"/g, '');
-                const diasDisponibles = parseInt(parts[3].replace(/"/g, '')) || 0;
-                const fechaInicio = parts[4].replace(/"/g, '');
-                const dias = JSON.parse(parts[5].replace(/"/g, '')) || [];
-                const franja1 = JSON.parse(parts[6].replace(/"/g, '')) || [];
-                const franja2 = JSON.parse(parts[7].replace(/"/g, '')) || [];
+                for (let j = 0; j < line.length; j++) {
+                    const char = line[j];
+                    if (char === '"') {
+                        inQuotes = !inQuotes;
+                    } else if (char === ',' && !inQuotes) {
+                        parts.push(current.trim());
+                        current = '';
+                    } else {
+                        current += char;
+                    }
+                }
+                parts.push(current.trim());
+
+                if (parts.length < 6) continue;
+
+                // Limpiar comillas de los valores
+                const clean = function(s) { return s.replace(/^"|"$/g, ''); };
+
+                const nombre = clean(parts[0]);
+                const diasDisponibles = parseInt(clean(parts[1])) || 0;
+                const diasUsados = parseInt(clean(parts[2])) || 0;
+                const diasRestantes = parseInt(clean(parts[3])) || 0;
+                const franja1Str = clean(parts[4]);
+                const franja2Str = clean(parts[5]);
+
+                // Parsear rangos de fechas (DD/MM/YYYY - DD/MM/YYYY)
+                function parseDateRange(rangeStr) {
+                    if (!rangeStr || rangeStr.trim() === '') return [];
+                    const match = rangeStr.match(/(\d{2}\/\d{2}\/\d{4})\s*-\s*(\d{2}\/\d{2}\/\d{4})/);
+                    if (!match) return [];
+
+                    const [_, startStr, endStr] = match;
+                    const [startDay, startMonth, startYear] = startStr.split('/').map(Number);
+                    const [endDay, endMonth, endYear] = endStr.split('/').map(Number);
+
+                    const startDate = new Date(startYear, startMonth - 1, startDay);
+                    const endDate = new Date(endYear, endMonth - 1, endDay);
+
+                    const dias = [];
+                    let current = new Date(startDate);
+                    while (current <= endDate) {
+                        const diaStr = formatearFechaLocal(current);
+                        if (!esDiaNoHabil(diaStr)) {
+                            dias.push(diaStr);
+                        }
+                        current.setDate(current.getDate() + 1);
+                    }
+                    return dias;
+                }
+
+                const franja1 = parseDateRange(franja1Str);
+                const franja2 = parseDateRange(franja2Str);
+                const todosDias = franja1.concat(franja2).sort();
+
+                const id = Date.now() + i;
 
                 efectivos.push({
                     id: id,
                     nombre: nombre,
-                    dni: dni,
+                    dni: '',
                     diasDisponibles: diasDisponibles,
-                    fechaInicio: fechaInicio,
-                    dias: dias,
+                    fechaInicio: franja1.length > 0 ? franja1[0] : '',
+                    dias: todosDias,
                     franja1: franja1,
                     franja2: franja2
                 });
             }
+
+            console.log('Total líneas:', lines.length);
+            console.log('Efectivos procesados:', efectivos.length);
+            console.log('Primer efectivo:', efectivos[0]);
 
             if (efectivos.length > 0) {
                 const todos = cargarEfectivos();
@@ -1760,7 +1819,7 @@
                 renderizarCalendario();
                 mostrarMensaje('Se importaron ' + efectivos.length + ' efectivos correctamente.', 'exito');
             } else {
-                mostrarMensaje('No se encontraron datos válidos en el archivo CSV.', 'error');
+                mostrarMensaje('No se encontraron datos válidos. Total líneas: ' + lines.length + '. Verificá el formato del CSV.', 'error');
             }
         };
         reader.readAsText(file);
