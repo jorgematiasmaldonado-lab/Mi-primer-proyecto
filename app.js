@@ -1,7 +1,9 @@
 // ============================================
-// ETAC - Cronograma de Licencia Anual
+// ETAC - Cronograma de Licencia Anual 2026 - 2027
 // Guardia A - BASE PUNILLA
 // Diseñado por: Maldonado Jorge Matias
+// Email: Jorgematiasmaldonado@gmail.com
+// Efectivo ETAC Punilla
 // ============================================
 
 // Feriados nacionales de Argentina con sus nombres
