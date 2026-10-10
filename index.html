@@ -3,70 +3,1974 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Variables de IIFF</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>ETAC - Cronograma de Licencia Anual</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            background: #1a202c;
+            min-height: 100vh;
+            padding: 20px;
+            color: #e2e8f0;
+        }
+
+        .container {
+            max-width: 640px;
+            margin: 0 auto;
+            overflow-x: hidden;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 24px;
+            background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+            border-radius: 12px;
+            border: 1px solid #4a5568;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: 8px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        header h1 {
+            font-size: 1.25rem;
+            color: #a0aec0;
+            font-weight: 400;
+            margin-bottom: 4px;
+        }
+
+        .subtitle {
+            color: #718096;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .form-section, .list-section {
+            background: #2d3748;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+            border: 1px solid #4a5568;
+        }
+
+        h2 {
+            font-size: 1.1rem;
+            margin-bottom: 16px;
+            color: #e2e8f0;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 2px solid #4a5568;
+            padding-bottom: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 12px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #a0aec0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 14px;
+            background: #1a202c;
+            border: 2px solid #4a5568;
+            border-radius: 8px;
+            font-size: 1rem;
+            color: #e2e8f0;
+            transition: border-color 0.2s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #63b3ed;
+        }
+
+        input::placeholder {
+            color: #4a5568;
+        }
+
+        .help-text {
+            font-size: 0.8rem;
+            color: #718096;
+            margin-bottom: 10px;
+        }
+
+        .calendar-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .btn-nav {
+            padding: 8px 14px;
+            background: #1a202c;
+            border: 1px solid #4a5568;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            color: #a0aec0;
+            transition: all 0.2s;
+        }
+
+        .btn-nav:hover {
+            background: #2d3748;
+            color: #e2e8f0;
+        }
+
+        .mes-label {
+            font-weight: 600;
+            color: #e2e8f0;
+            font-size: 0.95rem;
+        }
+
+        .calendario {
+            display: grid;
+            grid-template-columns: repeat(7, minmax(0, 1fr));
+            gap: 3px;
+            margin-bottom: 12px;
+            width: 100%;
+        }
+
+        .dia-header {
+            text-align: center;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #718096;
+            padding: 6px 0;
+            text-transform: uppercase;
+        }
+
+        .dia {
+            min-height: 50px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            padding: 2px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .dia.vacio {
+            background: transparent;
+            min-height: 0;
+            cursor: default;
+        }
+
+        .dia.libre {
+            background: #1a202c;
+            color: #4a5568;
+        }
+
+        .dia.franja1 {
+            background: #2b6cb0;
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .dia.franja2 {
+            background: #2f855a;
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .dia.ocupado-otro {
+            background: #742a2a;
+            color: #feb2b2;
+        }
+
+        .dia.prohibido {
+            background: #c53030;
+            color: #ffffff;
+            font-weight: 700;
+            border: 2px solid #fc8181;
+        }
+
+        .dia.feriado {
+            background: #744210;
+            color: #fbd38d;
+        }
+
+        .dia .numero {
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .dia .apellido {
+            font-size: 0.6rem;
+            margin-top: 1px;
+            text-align: center;
+            line-height: 1;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .dia.franja1 .apellido,
+        .dia.franja2 .apellido {
+            color: rgba(255,255,255,0.85);
+        }
+
+        .dia.ocupado-otro .apellido {
+            color: #feb2b2;
+        }
+
+        .dia.prohibido .apellido {
+            color: #ffffff;
+        }
+
+        .tooltip {
+            position: fixed;
+            background: #1a202c;
+            border: 1px solid #4a5568;
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-size: 0.85rem;
+            color: #e2e8f0;
+            pointer-events: none;
+            z-index: 1000;
+            max-width: 250px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            display: none;
+        }
+
+        .tooltip.visible {
+            display: block;
+        }
+
+        .tooltip .fecha {
+            font-weight: 600;
+            color: #63b3ed;
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+        }
+
+        .tooltip .feriado {
+            color: #fbd38d;
+            font-weight: 600;
+            margin-bottom: 6px;
+            font-size: 0.85rem;
+        }
+
+        .tooltip .prohibido {
+            color: #fc8181;
+            font-weight: 600;
+            margin-bottom: 6px;
+            font-size: 0.85rem;
+        }
+
+        .tooltip .persona {
+            padding: 4px 0;
+            border-bottom: 1px solid #2d3748;
+        }
+
+        .tooltip .persona:last-child {
+            border-bottom: none;
+        }
+
+        .tooltip .persona .nombre {
+            font-weight: 600;
+        }
+
+        .tooltip .persona .franja {
+            font-size: 0.75rem;
+            color: #718096;
+        }
+
+        .tooltip .sin-vacaciones {
+            color: #4a5568;
+            font-style: italic;
+        }
+
+        .leyenda {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.75rem;
+            color: #a0aec0;
+        }
+
+        .cuadrado {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+            display: inline-block;
+        }
+
+        .cuadrado.franja1 { background: #2b6cb0; }
+        .cuadrado.franja2 { background: #2f855a; }
+        .cuadrado.ocupado { background: #742a2a; }
+        .cuadrado.prohibido { background: #c53030; }
+        .cuadrado.feriado { background: #744210; }
+
+        .contador {
+            font-size: 0.85rem;
+            color: #a0aec0;
+        }
+
+        .contador strong {
+            color: #e2e8f0;
+        }
+
+        .ayuda-calendario {
+            font-size: 0.8rem;
+            color: #63b3ed;
+            margin-top: 8px;
+            font-style: italic;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #2b6cb0 0%, #2c5282 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-submit:hover {
+            background: linear-gradient(135deg, #3182ce 0%, #2b6cb0 100%);
+            transform: translateY(-1px);
+        }
+
+        .btn-cancelar {
+            width: 100%;
+            padding: 12px;
+            background: #1a202c;
+            color: #a0aec0;
+            border: 1px solid #4a5568;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-cancelar:hover {
+            background: #2d3748;
+            color: #e2e8f0;
+        }
+
+        .mensaje {
+            margin-top: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            display: none;
+        }
+
+        .mensaje.error {
+            display: block;
+            background: #742a2a;
+            color: #feb2b2;
+            border: 1px solid #9b2c2c;
+        }
+
+        .mensaje.exito {
+            display: block;
+            background: #276749;
+            color: #9ae6b4;
+            border: 1px solid #2f855a;
+        }
+
+        .list-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            border-bottom: 2px solid #4a5568;
+            padding-bottom: 8px;
+        }
+
+        .list-header h2 {
+            margin-bottom: 0;
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .btn-listado {
+            padding: 8px 16px;
+            background: #2b6cb0;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: background 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-listado:hover {
+            background: #3182ce;
+        }
+
+        .lista {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .efectivo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            background: #1a202c;
+            border-radius: 8px;
+            border-left: 4px solid #2b6cb0;
+        }
+
+        .efectivo.prohibido {
+            border-left-color: #c53030;
+            background: #2d1b1b;
+        }
+
+        .circulo {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #c53030;
+            flex-shrink: 0;
+            display: none;
+        }
+
+        .efectivo.prohibido .circulo {
+            display: block;
+        }
+
+        .info {
+            flex: 1;
+        }
+
+        .info .nombre {
+            font-weight: 600;
+            color: #e2e8f0;
+            font-size: 0.95rem;
+        }
+
+        .info .detalles {
+            font-size: 0.8rem;
+            color: #718096;
+            margin-top: 2px;
+        }
+
+        .badge {
+            font-size: 0.7rem;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-weight: 600;
+            background: #c53030;
+            color: white;
+            display: none;
+            text-transform: uppercase;
+        }
+
+        .efectivo.prohibido .badge {
+            display: inline-block;
+        }
+
+        .btn-eliminar {
+            padding: 6px 12px;
+            background: #742a2a;
+            color: #feb2b2;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 600;
+            transition: background 0.2s;
+            text-transform: uppercase;
+        }
+
+        .btn-eliminar:hover {
+            background: #9b2c2c;
+        }
+
+        .btn-editar {
+            padding: 6px 12px;
+            background: #2b6cb0;
+            color: #bee3f8;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 600;
+            transition: background 0.2s;
+            text-transform: uppercase;
+        }
+
+        .btn-editar:hover {
+            background: #3182ce;
+        }
+
+        .btn-detalles {
+            padding: 6px 12px;
+            background: #2d3748;
+            color: #a0aec0;
+            border: 1px solid #4a5568;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            text-transform: uppercase;
+        }
+
+        .btn-detalles:hover {
+            background: #4a5568;
+            color: #e2e8f0;
+        }
+
+        .detalles-expandidos {
+            margin-top: 10px;
+            padding: 14px;
+            background: #1a202c;
+            border-radius: 8px;
+            border: 1px solid #4a5568;
+            display: none;
+        }
+
+        .detalles-expandidos.visible {
+            display: block;
+        }
+
+        .detalles-expandidos h3 {
+            font-size: 0.85rem;
+            color: #a0aec0;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .detalles-expandidos .franja-info {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+        }
+
+        .detalles-expandidos .franja-info.franja1 {
+            background: rgba(43, 108, 176, 0.15);
+            border-left: 3px solid #2b6cb0;
+        }
+
+        .detalles-expandidos .franja-info.franja2 {
+            background: rgba(47, 133, 90, 0.15);
+            border-left: 3px solid #2f855a;
+        }
+
+        .detalles-expandidos .franja-info .titulo {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .detalles-expandidos .franja-info.franja1 .titulo {
+            color: #63b3ed;
+        }
+
+        .detalles-expandidos .franja-info.franja2 .titulo {
+            color: #68d391;
+        }
+
+        .detalles-expandidos .franja-info .fechas {
+            color: #a0aec0;
+            font-size: 0.8rem;
+        }
+
+        .vacio {
+            text-align: center;
+            color: #4a5568;
+            padding: 30px;
+            font-style: italic;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #4a5568;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .autor {
+            font-size: 0.75rem;
+            margin-top: 10px;
+            color: #718096;
+            font-style: italic;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 20px;
+        }
+
+        .modal.visible {
+            display: flex;
+        }
+
+        .modal-contenido {
+            background: #2d3748;
+            border-radius: 12px;
+            border: 1px solid #4a5568;
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 24px;
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .modal-header h2 {
+            margin-bottom: 0;
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .btn-cerrar-modal {
+            background: none;
+            border: none;
+            color: #a0aec0;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 4px 8px;
+            transition: color 0.2s;
+        }
+
+        .btn-cerrar-modal:hover {
+            color: #e2e8f0;
+        }
+
+        .modal-acciones {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .btn-exportar, .btn-imprimir, .btn-importar {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-exportar {
+            background: #2f855a;
+            color: white;
+        }
+
+        .btn-exportar:hover {
+            background: #38a169;
+        }
+
+        .btn-importar {
+            background: #2f855a;
+            color: white;
+        }
+
+        .btn-importar:hover {
+            background: #38a169;
+        }
+
+        .btn-imprimir {
+            background: #2b6cb0;
+            color: white;
+        }
+
+        .btn-imprimir:hover {
+            background: #3182ce;
+        }
+
+        .modal-tabla {
+            overflow-x: auto;
+        }
+
+        .modal-tabla table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        .modal-tabla th,
+        .modal-tabla td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid #4a5568;
+        }
+
+        .modal-tabla th {
+            background: #1a202c;
+            color: #a0aec0;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+        }
+
+        .modal-tabla td {
+            color: #e2e8f0;
+        }
+
+        .modal-tabla tr:hover td {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .modal-tabla .sin-franja {
+            color: #4a5568;
+            font-style: italic;
+        }
+
+        .modal-tabla .dias-restantes {
+            color: #68d391;
+            font-weight: 600;
+        }
+
+        .modal-tabla .dias-agotados {
+            color: #fc8181;
+            font-weight: 600;
+        }
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+
+            .modal,
+            .modal * {
+                visibility: visible;
+            }
+
+            .modal {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: auto;
+                background: white;
+                padding: 0;
+            }
+
+            .modal-contenido {
+                background: white;
+                border: none;
+                max-width: 100%;
+                max-height: none;
+                overflow: visible;
+                color: black;
+            }
+
+            .modal-header h2 {
+                color: black;
+            }
+
+            .modal-acciones {
+                display: none;
+            }
+
+            .btn-cerrar-modal {
+                display: none;
+            }
+
+            .modal-tabla th {
+                background: #e2e8f0;
+                color: black;
+            }
+
+            .modal-tabla td {
+                color: black;
+                border-bottom: 1px solid #ccc;
+            }
+
+            .modal-tabla .sin-franja {
+                color: #666;
+            }
+
+            .modal-tabla .dias-restantes,
+            .modal-tabla .dias-agotados {
+                color: black;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 12px;
+            }
+
+            .logo {
+                font-size: 2rem;
+                letter-spacing: 6px;
+            }
+
+            header h1 {
+                font-size: 1rem;
+            }
+
+            .form-section, .list-section {
+                padding: 18px;
+            }
+
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+
+            .dia {
+                min-height: 40px;
+            }
+
+            .dia .apellido {
+                font-size: 0.55rem;
+            }
+
+            .list-header {
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+
+            .modal-acciones {
+                flex-direction: column;
+            }
+
+            .btn-exportar, .btn-imprimir, .btn-importar {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>🔥 Variables de IIFF</h1>
-            <p class="subtitle">Registro del comportamiento del fuego</p>
+            <div class="logo">ETAC</div>
+            <h1>Cronograma de Licencia anual</h1>
+            <p class="subtitle">Guardia A - BASE PUNILLA</p>
+            <p class="autor">© 2026 Maldonado Jorge Matias - Todos los derechos reservados</p>
         </header>
 
-        <section class="card">
-            <h2>Nuevo registro</h2>
-            <form id="formRegistro">
-                <label for="nombre">Nombre</label>
-                <input type="text" id="nombre" required>
+        <section class="form-section">
+            <h2 id="formTitulo">Registrar efectivo</h2>
+            <form id="vacationForm">
+                <input type="hidden" id="editandoId" value="">
 
-                <label for="apellido">Apellido</label>
-                <input type="text" id="apellido" required>
-
-                <label for="institucion">Institución</label>
-                <input type="text" id="institucion" required>
-
-                <label for="fecha">Fecha y hora (automática)</label>
-                <input type="datetime-local" id="fecha" required readonly>
-
-                <label for="longitud">Longitud de llama (metros)</label>
-                <input type="number" id="longitud" step="0.1" min="0">
-                <small>Referencia: longitud de llama = altura total de la zona flameante medida en horizontal/vertical. Ej: matorral bajo ≈ 1 m.</small>
-
-                <label for="altura">Altura de llama (metros)</label>
-                <input type="number" id="altura" step="0.1" min="0">
-                <small>Referencia: Pino = 8/10 m de altura · Altura de un hombre ≈ 1.8 m · Matorral bajo ≈ 0.5 m.</small>
-
-                <label for="velocidad">Velocidad de propagación (metros por minuto)</label>
-                <input type="number" id="velocidad" step="1" min="0">
-                <small>Referencia: Fuego lento = 1 m/min · Velocidad media = 10 m/min · Rápido = más de 30/40 m/min.</small>
-
-                <h3>Ubicación</h3>
-                <p class="ayuda">Las coordenadas se cargan solas con el GPS del teléfono, pero podés modificarlas si es necesario.</p>
-                <div class="fila">
-                    <input type="number" id="latitud" step="any" placeholder="Latitud">
-                    <input type="number" id="longitudPos" step="any" placeholder="Longitud">
+                <div class="form-group">
+                    <label for="nombre">Apellido y Nombre</label>
+                    <input type="text" id="nombre" placeholder="Ej: García, Juan" required>
                 </div>
-                <button type="button" id="btnGeo" class="btn-secundario">📍 Actualizar ubicación del teléfono</button>
 
-                <label for="sector">Sector del incendio (opcional)</label>
-                <input type="text" id="sector" placeholder="Ej: Frente norte, Sector Alfa">
+                <div class="form-group">
+                    <label for="dni">DNI</label>
+                    <input type="text" id="dni" placeholder="Ej: 30123456" required>
+                </div>
 
-                <h3>Carga por audio</h3>
-                <p class="ayuda">Dictá el reporte de forma coloquial y la app detectará los valores. Ej: "El fuego avanza rapidísimo, las llamas miden unos 5 metros..."</p>
-                <button type="button" id="btnGrabar" class="btn-secundario">🎙️ Grabar audio</button>
-                <textarea id="transcripcion" rows="4" placeholder="Transcripción del audio..."></textarea>
-                <button type="button" id="btnDetectar" class="btn-secundario">Detectar valores del texto</button>
+                <div class="form-group">
+                    <label for="diasDisponibles">Días hábiles disponibles</label>
+                    <input type="number" id="diasDisponibles" min="1" placeholder="Ej: 20" required>
+                </div>
 
-                <button type="submit" class="btn-principal">Guardar registro</button>
+                <div class="form-group">
+                    <label>Primera franja</label>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="fechaInicio">Fecha de inicio</label>
+                            <input type="date" id="fechaInicio" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="diasFranja1">Días hábiles</label>
+                            <input type="number" id="diasFranja1" min="0" placeholder="Ej: 10">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Segunda franja</label>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="fechaInicioFranja2">Fecha de inicio</label>
+                            <input type="date" id="fechaInicioFranja2">
+                        </div>
+                        <div class="form-group">
+                            <label for="diasFranja2">Días hábiles</label>
+                            <input type="number" id="diasFranja2" min="0" placeholder="Ej: 5">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Calendario de franjas</label>
+                    <p class="help-text">Los días se asignan automáticamente según la configuración de cada franja.</p>
+                    <div class="calendar-nav">
+                        <button type="button" id="mesAnterior" class="btn-nav">← Anterior</button>
+                        <span id="mesActual" class="mes-label"></span>
+                        <button type="button" id="mesSiguiente" class="btn-nav">Siguiente →</button>
+                    </div>
+                    <div id="calendario" class="calendario"></div>
+                    <div class="leyenda">
+                        <span class="item"><span class="cuadrado franja1"></span> Primera franja</span>
+                        <span class="item"><span class="cuadrado franja2"></span> Segunda franja</span>
+                        <span class="item"><span class="cuadrado ocupado"></span> Ocupado</span>
+                        <span class="item"><span class="cuadrado prohibido"></span> Prohibido</span>
+                        <span class="item"><span class="cuadrado feriado"></span> Feriado</span>
+                    </div>
+                    <p class="contador">
+                        Primera franja: <strong id="contadorFranja1">0</strong> días ·
+                        Segunda franja: <strong id="contadorFranja2">0</strong> días ·
+                        Total: <strong id="contadorTotal">0</strong> días
+                    </p>
+                    <p id="ayudaCalendario" class="ayuda-calendario">Configurá las franjas para ver el calendario.</p>
+                </div>
+
+                <button type="submit" class="btn-submit" id="btnSubmit">Añadir efectivo</button>
+                <button type="button" class="btn-cancelar" id="btnCancelar" style="display:none;">Cancelar edición</button>
             </form>
+            <p id="mensaje" class="mensaje"></p>
         </section>
 
-        <section class="card">
-            <h2>Registros guardados</h2>
-            <div id="lista"></div>
-            <button type="button" id="btnInforme" class="btn-principal">📄 Generar archivo para Mesa de Comando</button>
+        <section class="list-section">
+            <div class="list-header">
+                <h2>Efectivos registrados</h2>
+                <button type="button" class="btn-listado" id="btnListado">Ver listado</button>
+            </div>
+            <div id="lista" class="lista"></div>
         </section>
+
+        <footer>
+            <p>ETAC · Guardia A - BASE PUNILLA</p>
+            <p class="autor">Diseñado por: Maldonado Jorge Matias</p>
+        </footer>
     </div>
-    <script src="app.js"></script>
+
+    <div id="modalListado" class="modal">
+        <div class="modal-contenido">
+            <div class="modal-header">
+                <h2>Listado de efectivos</h2>
+                <button type="button" class="btn-cerrar-modal" id="btnCerrarModal">✕</button>
+            </div>
+            <div class="modal-acciones">
+                <button type="button" class="btn-exportar" id="btnExportar">Exportar CSV</button>
+                <button type="button" class="btn-importar" id="btnImportar">Importar CSV</button>
+                <button type="button" class="btn-imprimir" id="btnImprimir">Imprimir</button>
+            </div>
+            <input type="file" id="fileImport" accept=".csv" style="display:none;">
+            <div class="modal-tabla">
+                <table id="tablaListado">
+                    <thead>
+                        <tr>
+                            <th>Apellido y Nombre</th>
+                            <th>Días disponibles</th>
+                            <th>Días usados</th>
+                            <th>Días restantes</th>
+                            <th>1ª Franja (Inicio - Fin)</th>
+                            <th>2ª Franja (Inicio - Fin)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cuerpoTabla"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="tooltip" class="tooltip"></div>
+
+    <script>
+    // ============================================
+    // ETAC - Cronograma de Licencia Anual
+    // Guardia A - BASE PUNILLA
+    // Diseñado por: Maldonado Jorge Matias
+    // ============================================
+
+    const FERIADOS = {
+        '2026-12-08': 'Inmaculada Concepción',
+        '2026-12-24': 'Noche Buena',
+        '2026-12-25': 'Navidad',
+        '2026-12-31': 'Año Viejo',
+        '2027-01-01': 'Año Nuevo',
+        '2027-02-08': 'Carnaval',
+        '2027-02-09': 'Carnaval',
+        '2027-03-24': 'Día Nacional de la Memoria por la Verdad y la Justicia',
+        '2027-03-26': 'Viernes Santo',
+        '2027-04-02': 'Día del Veterano y de los Caídos en la Guerra de Malvinas',
+        '2027-05-01': 'Día del Trabajador',
+        '2027-05-25': 'Día de la Revolución de Mayo',
+        '2027-06-20': 'Paso a la Inmortalidad del General Manuel Belgrano',
+    };
+
+    const FECHA_MINIMA = '2026-12-01';
+    const FECHA_MAXIMA = '2027-06-30';
+    const MAX_SIMULTANEAS = 3;
+    const STORAGE_KEY = 'vacaciones_efectivos';
+
+    let mesMostrado = new Date();
+    let editandoId = null;
+
+    function formatearFechaLocal(fecha) {
+        const año = fecha.getFullYear();
+        const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+        const dia = String(fecha.getDate()).padStart(2, '0');
+        return año + '-' + mes + '-' + dia;
+    }
+
+    function esDiaNoHabil(fechaStr) {
+        const fecha = new Date(fechaStr + 'T00:00:00');
+        const diaSemana = fecha.getDay();
+        return diaSemana === 0 || diaSemana === 6 || FERIADOS.hasOwnProperty(fechaStr);
+    }
+
+    function obtenerDiasHabiles(fechaInicio, fechaFin) {
+        const dias = [];
+        let actual = new Date(fechaInicio + 'T00:00:00');
+        const fin = new Date(fechaFin + 'T00:00:00');
+        while (actual <= fin) {
+            const fechaStr = formatearFechaLocal(actual);
+            if (!esDiaNoHabil(fechaStr)) {
+                dias.push(fechaStr);
+            }
+            actual.setDate(actual.getDate() + 1);
+        }
+        return dias;
+    }
+
+    function obtenerPrimerosDiasHabiles(fechaInicio, cantidad) {
+        const dias = [];
+        let actual = new Date(fechaInicio + 'T00:00:00');
+        let contador = 0;
+        while (contador < cantidad) {
+            const fechaStr = formatearFechaLocal(actual);
+            if (!esDiaNoHabil(fechaStr)) {
+                dias.push(fechaStr);
+                contador++;
+            }
+            actual.setDate(actual.getDate() + 1);
+        }
+        return dias;
+    }
+
+    function contarEnDia(fechaStr, efectivos) {
+        let count = 0;
+        for (let i = 0; i < efectivos.length; i++) {
+            if (efectivos[i].dias.indexOf(fechaStr) !== -1) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    function obtenerApellidosEnDia(fechaStr, efectivos) {
+        const apellidos = [];
+        for (let i = 0; i < efectivos.length; i++) {
+            if (efectivos[i].dias.indexOf(fechaStr) !== -1) {
+                const nombre = efectivos[i].nombre;
+                const partes = nombre.split(',');
+                apellidos.push(partes[0].trim());
+            }
+        }
+        return apellidos;
+    }
+
+    function obtenerEfectivosEnDia(fechaStr, efectivos) {
+        const personas = [];
+        for (let i = 0; i < efectivos.length; i++) {
+            const ef = efectivos[i];
+            if (ef.dias.indexOf(fechaStr) !== -1) {
+                let franja = '';
+                if (ef.franja1.indexOf(fechaStr) !== -1) {
+                    franja = '1ª franja';
+                } else if (ef.franja2.indexOf(fechaStr) !== -1) {
+                    franja = '2ª franja';
+                }
+                personas.push({ nombre: ef.nombre, franja: franja });
+            }
+        }
+        return personas;
+    }
+
+    function formatearFechaLegible(fechaStr) {
+        if (!fechaStr) return '';
+        const partes = fechaStr.split('-');
+        return partes[2] + '/' + partes[1] + '/' + partes[0];
+    }
+
+    function cargarEfectivos() {
+        try {
+            const datos = localStorage.getItem(STORAGE_KEY);
+            return datos ? JSON.parse(datos) : [];
+        } catch (e) {
+            return [];
+        }
+    }
+
+    function guardarEfectivos(efectivos) {
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(efectivos));
+        } catch (e) {
+            // Si no se puede guardar, continuar sin error
+        }
+    }
+
+    function obtenerDiasDelMes(año, mes) {
+        const primerDia = new Date(año, mes, 1);
+        const ultimoDia = new Date(año, mes + 1, 0);
+        const diasEnMes = ultimoDia.getDate();
+        const diaSemanaInicio = primerDia.getDay();
+        const dias = [];
+        for (let i = 0; i < diaSemanaInicio; i++) {
+            dias.push(null);
+        }
+        for (let d = 1; d <= diasEnMes; d++) {
+            const fecha = new Date(año, mes, d);
+            dias.push(formatearFechaLocal(fecha));
+        }
+        return dias;
+    }
+
+    function obtenerNombreMes(año, mes) {
+        const meses = [
+            'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+            'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+        ];
+        return meses[mes] + ' ' + año;
+    }
+
+    function calcularFranjas(fechaInicio, diasFranja1, fechaInicioFranja2, diasFranja2) {
+        const franja1 = [];
+        if (fechaInicio && diasFranja1 > 0) {
+            const dias = obtenerPrimerosDiasHabiles(fechaInicio, diasFranja1);
+            for (let i = 0; i < dias.length; i++) {
+                franja1.push(dias[i]);
+            }
+        }
+        const franja2 = [];
+        if (fechaInicioFranja2 && diasFranja2 > 0) {
+            const dias = obtenerPrimerosDiasHabiles(fechaInicioFranja2, diasFranja2);
+            for (let i = 0; i < dias.length; i++) {
+                franja2.push(dias[i]);
+            }
+        }
+        return { franja1: franja1, franja2: franja2 };
+    }
+
+    function renderizarCalendario() {
+        const calendario = document.getElementById('calendario');
+        const mesLabel = document.getElementById('mesActual');
+        const ayuda = document.getElementById('ayudaCalendario');
+        const efectivos = cargarEfectivos();
+
+        const fechaInicio = document.getElementById('fechaInicio').value;
+        const diasF1 = parseInt(document.getElementById('diasFranja1').value, 10) || 0;
+        const fechaInicioF2 = document.getElementById('fechaInicioFranja2').value;
+        const diasF2 = parseInt(document.getElementById('diasFranja2').value, 10) || 0;
+
+        let franja1 = [];
+        let franja2 = [];
+        let hayFranjas = false;
+
+        if (fechaInicio && diasF1 > 0) {
+            const calculado = calcularFranjas(fechaInicio, diasF1, fechaInicioF2, diasF2);
+            franja1 = calculado.franja1;
+            franja2 = calculado.franja2;
+            hayFranjas = true;
+        } else if (fechaInicioF2 && diasF2 > 0) {
+            const calculado = calcularFranjas(fechaInicio, diasF1, fechaInicioF2, diasF2);
+            franja2 = calculado.franja2;
+            hayFranjas = true;
+        }
+
+        if (ayuda) {
+            if (hayFranjas) {
+                ayuda.style.display = 'none';
+            } else {
+                ayuda.style.display = 'block';
+            }
+        }
+
+        const año = mesMostrado.getFullYear();
+        const mes = mesMostrado.getMonth();
+
+        mesLabel.textContent = obtenerNombreMes(año, mes);
+
+        const dias = obtenerDiasDelMes(año, mes);
+        const diasSemana = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+
+        let html = '';
+        for (let i = 0; i < diasSemana.length; i++) {
+            html += '<div class="dia-header">' + diasSemana[i] + '</div>';
+        }
+
+        for (let i = 0; i < dias.length; i++) {
+            const fechaStr = dias[i];
+
+            if (!fechaStr) {
+                html += '<div class="dia vacio"></div>';
+                continue;
+            }
+
+            const fecha = new Date(fechaStr + 'T00:00:00');
+            const diaSemana = fecha.getDay();
+            const esFeriado = FERIADOS.hasOwnProperty(fechaStr);
+            const esFinde = diaSemana === 0 || diaSemana === 6;
+
+            const apellidos = obtenerApellidosEnDia(fechaStr, efectivos);
+            const enFranja1 = franja1.indexOf(fechaStr) !== -1;
+            const enFranja2 = franja2.indexOf(fechaStr) !== -1;
+
+            const cantidadEnDia = contarEnDia(fechaStr, efectivos);
+            const esProhibido = cantidadEnDia > MAX_SIMULTANEAS;
+
+            let clase = 'dia ';
+
+            if (esFeriado) {
+                clase += 'feriado';
+            } else if (esFinde) {
+                clase += 'ocupado-otro';
+            } else if (esProhibido) {
+                clase += 'prohibido';
+            } else if (enFranja1) {
+                clase += 'franja1';
+            } else if (enFranja2) {
+                clase += 'franja2';
+            } else if (apellidos.length > 0) {
+                clase += 'ocupado-otro';
+            } else {
+                clase += 'libre';
+            }
+
+            let apellidoHtml = '';
+            if (apellidos.length > 0) {
+                apellidoHtml = '<span class="apellido">' + apellidos.join(', ') + '</span>';
+            }
+
+            html += '<div class="' + clase + '" data-fecha="' + fechaStr + '"><span class="numero">' + fecha.getDate() + '</span>' + apellidoHtml + '</div>';
+        }
+
+        calendario.innerHTML = html;
+
+        const diasConFecha = calendario.querySelectorAll('.dia[data-fecha]');
+        for (let i = 0; i < diasConFecha.length; i++) {
+            diasConFecha[i].addEventListener('mouseenter', mostrarTooltip);
+            diasConFecha[i].addEventListener('mouseleave', ocultarTooltip);
+            diasConFecha[i].addEventListener('click', mostrarTooltip);
+        }
+
+        document.getElementById('contadorFranja1').textContent = franja1.length;
+        document.getElementById('contadorFranja2').textContent = franja2.length;
+        document.getElementById('contadorTotal').textContent = franja1.length + franja2.length;
+    }
+
+    function mostrarTooltip(event) {
+        const fechaStr = event.currentTarget.dataset.fecha;
+        const efectivos = cargarEfectivos();
+        const tooltip = document.getElementById('tooltip');
+
+        const personas = obtenerEfectivosEnDia(fechaStr, efectivos);
+        const esFeriado = FERIADOS.hasOwnProperty(fechaStr);
+        const cantidadEnDia = contarEnDia(fechaStr, efectivos);
+        const esProhibido = cantidadEnDia > MAX_SIMULTANEAS;
+
+        let html = '<div class="fecha">' + formatearFechaLegible(fechaStr) + '</div>';
+
+        if (esFeriado) {
+            html += '<div class="feriado">' + FERIADOS[fechaStr] + '</div>';
+        }
+
+        if (esProhibido) {
+            html += '<div class="prohibido">Supera el cupo (' + cantidadEnDia + ' personas)</div>';
+        }
+
+        if (personas.length === 0) {
+            html += '<div class="sin-vacaciones">Sin licencia</div>';
+        } else {
+            for (let i = 0; i < personas.length; i++) {
+                html += '<div class="persona"><div class="nombre">' + personas[i].nombre + '</div><div class="franja">' + personas[i].franja + '</div></div>';
+            }
+        }
+
+        tooltip.innerHTML = html;
+        tooltip.classList.add('visible');
+
+        const rect = event.currentTarget.getBoundingClientRect();
+        const tooltipRect = tooltip.getBoundingClientRect();
+
+        let left = rect.left + rect.width / 2 - tooltipRect.width / 2;
+        let top = rect.top - tooltipRect.height - 8;
+
+        if (left < 8) left = 8;
+        if (left + tooltipRect.width > window.innerWidth - 8) {
+            left = window.innerWidth - tooltipRect.width - 8;
+        }
+        if (top < 8) top = rect.bottom + 8;
+
+        tooltip.style.left = left + 'px';
+        tooltip.style.top = top + 'px';
+    }
+
+    function ocultarTooltip() {
+        const tooltip = document.getElementById('tooltip');
+        tooltip.classList.remove('visible');
+    }
+
+    function validarFormulario(nombre, dni, diasDisponibles, fechaInicio, diasF1, fechaInicioF2, diasF2) {
+        if (!nombre.trim()) {
+            return 'El apellido y nombre son obligatorios.';
+        }
+
+        if (!dni.trim()) {
+            return 'El DNI es obligatorio.';
+        }
+
+        if (!diasDisponibles || diasDisponibles < 1) {
+            return 'Los días hábiles disponibles son obligatorios y deben ser al menos 1.';
+        }
+
+        if (!fechaInicio) {
+            return 'La fecha de inicio de la primera franja es obligatoria.';
+        }
+
+        if (fechaInicio < FECHA_MINIMA || fechaInicio > FECHA_MAXIMA) {
+            return 'Las fechas deben estar entre el 01/12/2026 y el 30/06/2027.';
+        }
+
+        if (diasF1 < 0) {
+            return 'Los días de la primera franja no pueden ser negativos.';
+        }
+
+        if (fechaInicioF2 || diasF2 > 0) {
+            if (!fechaInicioF2) {
+                return 'Si completás días de la segunda franja, también necesitás la fecha de inicio.';
+            }
+            if (diasF2 <= 0) {
+                return 'Si completás la fecha de la segunda franja, también necesitás los días hábiles.';
+            }
+            if (fechaInicioF2 < FECHA_MINIMA || fechaInicioF2 > FECHA_MAXIMA) {
+                return 'Las fechas deben estar entre el 01/12/2026 y el 30/06/2027.';
+            }
+        }
+
+        const calculado = calcularFranjas(fechaInicio, diasF1, fechaInicioF2, diasF2);
+        const totalDias = calculado.franja1.length + calculado.franja2.length;
+
+        if (totalDias > diasDisponibles) {
+            return 'No podés tomar más días de los que tenés disponibles. Tenés ' + diasDisponibles + ' días y querés tomar ' + totalDias + '.';
+        }
+
+        return null;
+    }
+
+    function agregarEfectivo(nombre, dni, diasDisponibles, fechaInicio, diasF1, fechaInicioF2, diasF2) {
+        const efectivos = cargarEfectivos();
+        const calculado = calcularFranjas(fechaInicio, diasF1, fechaInicioF2, diasF2);
+
+        const todosDias = calculado.franja1.concat(calculado.franja2);
+        todosDias.sort();
+
+        const nuevo = {
+            id: Date.now(),
+            nombre: nombre.trim(),
+            dni: dni.trim(),
+            diasDisponibles: diasDisponibles,
+            fechaInicio: fechaInicio,
+            dias: todosDias,
+            franja1: calculado.franja1,
+            franja2: calculado.franja2,
+        };
+
+        efectivos.push(nuevo);
+        guardarEfectivos(efectivos);
+    }
+
+    function actualizarEfectivo(id, nombre, dni, diasDisponibles, fechaInicio, diasF1, fechaInicioF2, diasF2) {
+        const efectivos = cargarEfectivos();
+        let index = -1;
+
+        for (let i = 0; i < efectivos.length; i++) {
+            if (efectivos[i].id === id) {
+                index = i;
+                break;
+            }
+        }
+
+        if (index === -1) return;
+
+        const calculado = calcularFranjas(fechaInicio, diasF1, fechaInicioF2, diasF2);
+
+        const todosDias = calculado.franja1.concat(calculado.franja2);
+        todosDias.sort();
+
+        efectivos[index].nombre = nombre.trim();
+        efectivos[index].dni = dni.trim();
+        efectivos[index].diasDisponibles = diasDisponibles;
+        efectivos[index].fechaInicio = fechaInicio;
+        efectivos[index].dias = todosDias;
+        efectivos[index].franja1 = calculado.franja1;
+        efectivos[index].franja2 = calculado.franja2;
+
+        guardarEfectivos(efectivos);
+    }
+
+    function eliminarEfectivo(id) {
+        const efectivos = cargarEfectivos();
+        const nuevos = [];
+
+        for (let i = 0; i < efectivos.length; i++) {
+            if (efectivos[i].id !== id) {
+                nuevos.push(efectivos[i]);
+            }
+        }
+
+        guardarEfectivos(nuevos);
+    }
+
+    function renderizarLista() {
+        const lista = document.getElementById('lista');
+        const efectivos = cargarEfectivos();
+
+        if (efectivos.length === 0) {
+            lista.innerHTML = '<p class="vacio">No hay efectivos registrados todavía.</p>';
+            return;
+        }
+
+        efectivos.sort(function(a, b) {
+            return a.nombre.localeCompare(b.nombre, 'es');
+        });
+
+        let html = '';
+
+        for (let i = 0; i < efectivos.length; i++) {
+            const ef = efectivos[i];
+
+            let diasSobrecargados = 0;
+            for (let j = 0; j < ef.dias.length; j++) {
+                if (contarEnDia(ef.dias[j], efectivos) > MAX_SIMULTANEAS) {
+                    diasSobrecargados++;
+                }
+            }
+            const prohibido = diasSobrecargados > 0;
+
+            const clase = prohibido ? 'prohibido' : '';
+            const circulo = prohibido ? '<span class="circulo"></span>' : '';
+            const badge = prohibido ? '<span class="badge">Prohibido</span>' : '';
+
+            const finFranja1 = ef.franja1.length > 0 ? ef.franja1[ef.franja1.length - 1] : null;
+            const finFranja2 = ef.franja2.length > 0 ? ef.franja2[ef.franja2.length - 1] : null;
+
+            const diasUsados = ef.dias.length;
+            const diasRestantes = ef.diasDisponibles - diasUsados;
+
+            html += '<div class="efectivo ' + clase + '">';
+            html += circulo;
+            html += '<div class="info">';
+            html += '<div class="nombre">' + ef.nombre + '</div>';
+            html += '<div class="detalles">DNI: ' + ef.dni + ' · Disponibles: ' + ef.diasDisponibles + ' · Usados: ' + diasUsados + ' · Restantes: ' + diasRestantes + '</div>';
+            html += '</div>';
+            html += badge;
+            html += '<button class="btn-detalles" data-id="' + ef.id + '">Detalles</button>';
+            html += '<button class="btn-editar" data-id="' + ef.id + '">Editar</button>';
+            html += '<button class="btn-eliminar" data-id="' + ef.id + '">Eliminar</button>';
+            html += '</div>';
+
+            html += '<div class="detalles-expandidos" id="detalles-' + ef.id + '">';
+            html += '<h3>Detalle de licencia</h3>';
+            html += '<div class="franja-info franja1">';
+            html += '<div class="titulo">Primera franja</div>';
+            html += '<div class="fechas">Inicio: ' + formatearFechaLegible(ef.fechaInicio) + ' · Fin: ' + formatearFechaLegible(finFranja1) + ' · ' + ef.franja1.length + ' días hábiles</div>';
+            html += '</div>';
+
+            if (ef.franja2.length > 0) {
+                html += '<div class="franja-info franja2">';
+                html += '<div class="titulo">Segunda franja</div>';
+                html += '<div class="fechas">Inicio: ' + formatearFechaLegible(ef.franja2[0]) + ' · Fin: ' + formatearFechaLegible(finFranja2) + ' · ' + ef.franja2.length + ' días hábiles</div>';
+                html += '</div>';
+            }
+
+            html += '<div class="franja-info" style="background: rgba(99, 179, 237, 0.1); border-left: 3px solid #63b3ed;">';
+            html += '<div class="titulo" style="color: #63b3ed;">Resumen de días</div>';
+            html += '<div class="fechas">Disponibles: ' + ef.diasDisponibles + ' · Usados: ' + diasUsados + ' · Restantes: ' + diasRestantes + '</div>';
+            html += '</div>';
+
+            html += '</div>';
+        }
+
+        lista.innerHTML = html;
+
+        const botonesEliminar = lista.querySelectorAll('.btn-eliminar');
+        for (let i = 0; i < botonesEliminar.length; i++) {
+            botonesEliminar[i].addEventListener('click', function() {
+                const id = parseInt(this.dataset.id, 10);
+                const efectivos = cargarEfectivos();
+                let ef = null;
+                for (let j = 0; j < efectivos.length; j++) {
+                    if (efectivos[j].id === id) {
+                        ef = efectivos[j];
+                        break;
+                    }
+                }
+                const nombre = ef ? ef.nombre : '';
+                const confirmacion = confirm('¿Estás seguro de que querés eliminar a ' + nombre + '?\n\nEsta acción no se puede deshacer.');
+                if (confirmacion) {
+                    eliminarEfectivo(id);
+                    renderizarLista();
+                    renderizarCalendario();
+                }
+            });
+        }
+
+        const botonesEditar = lista.querySelectorAll('.btn-editar');
+        for (let i = 0; i < botonesEditar.length; i++) {
+            botonesEditar[i].addEventListener('click', function() {
+                const id = parseInt(this.dataset.id, 10);
+                cargarEfectivoEnFormulario(id);
+            });
+        }
+
+        const botonesDetalles = lista.querySelectorAll('.btn-detalles');
+        for (let i = 0; i < botonesDetalles.length; i++) {
+            botonesDetalles[i].addEventListener('click', function() {
+                const id = this.dataset.id;
+                const detalles = document.getElementById('detalles-' + id);
+                if (detalles) {
+                    detalles.classList.toggle('visible');
+                }
+            });
+        }
+    }
+
+    function abrirListado() {
+        const modal = document.getElementById('modalListado');
+        const cuerpoTabla = document.getElementById('cuerpoTabla');
+        const efectivos = cargarEfectivos();
+
+        efectivos.sort(function(a, b) {
+            return a.nombre.localeCompare(b.nombre, 'es');
+        });
+
+        let html = '';
+
+        for (let i = 0; i < efectivos.length; i++) {
+            const ef = efectivos[i];
+
+            const totalDias = ef.dias.length;
+            const diasRestantes = ef.diasDisponibles - totalDias;
+
+            let franja1Texto = '<span class="sin-franja">—</span>';
+            if (ef.franja1.length > 0) {
+                const inicio = formatearFechaLegible(ef.franja1[0]);
+                const fin = formatearFechaLegible(ef.franja1[ef.franja1.length - 1]);
+                franja1Texto = inicio + ' - ' + fin;
+            }
+
+            let franja2Texto = '<span class="sin-franja">—</span>';
+            if (ef.franja2.length > 0) {
+                const inicio = formatearFechaLegible(ef.franja2[0]);
+                const fin = formatearFechaLegible(ef.franja2[ef.franja2.length - 1]);
+                franja2Texto = inicio + ' - ' + fin;
+            }
+
+            let restantesClass = 'dias-restantes';
+            if (diasRestantes === 0) {
+                restantesClass = 'dias-agotados';
+            }
+
+            html += '<tr>';
+            html += '<td>' + ef.nombre + '</td>';
+            html += '<td>' + ef.diasDisponibles + '</td>';
+            html += '<td>' + totalDias + '</td>';
+            html += '<td class="' + restantesClass + '">' + diasRestantes + '</td>';
+            html += '<td>' + franja1Texto + '</td>';
+            html += '<td>' + franja2Texto + '</td>';
+            html += '</tr>';
+        }
+
+        cuerpoTabla.innerHTML = html;
+        modal.classList.add('visible');
+    }
+
+    function cerrarListado() {
+        const modal = document.getElementById('modalListado');
+        modal.classList.remove('visible');
+    }
+
+    function exportarCSV() {
+        const efectivos = cargarEfectivos();
+
+        efectivos.sort(function(a, b) {
+            return a.nombre.localeCompare(b.nombre, 'es');
+        });
+
+        let csv = 'Apellido y Nombre,Días disponibles,Días usados,Días restantes,1ª Franja (Inicio - Fin),2ª Franja (Inicio - Fin)\n';
+
+        for (let i = 0; i < efectivos.length; i++) {
+            const ef = efectivos[i];
+
+            const totalDias = ef.dias.length;
+            const diasRestantes = ef.diasDisponibles - totalDias;
+
+            let franja1Texto = '—';
+            if (ef.franja1.length > 0) {
+                const inicio = formatearFechaLegible(ef.franja1[0]);
+                const fin = formatearFechaLegible(ef.franja1[ef.franja1.length - 1]);
+                franja1Texto = inicio + ' - ' + fin;
+            }
+
+            let franja2Texto = '—';
+            if (ef.franja2.length > 0) {
+                const inicio = formatearFechaLegible(ef.franja2[0]);
+                const fin = formatearFechaLegible(ef.franja2[ef.franja2.length - 1]);
+                franja2Texto = inicio + ' - ' + fin;
+            }
+
+            csv += '"' + ef.nombre + '",' + ef.diasDisponibles + ',' + totalDias + ',' + diasRestantes + ',"' + franja1Texto + '","' + franja2Texto + '"\n';
+        }
+
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'listado_efectivos_etac.csv';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+
+    function imprimirListado() {
+        window.print();
+    }
+
+    function importarCSV() {
+        const fileInput = document.getElementById('fileImport');
+        fileInput.click();
+    }
+
+    function procesarCSV(file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            let text = e.target.result;
+
+            // Eliminar BOM si existe
+            if (text.charCodeAt(0) === 0xFEFF) {
+                text = text.slice(1);
+            }
+
+            const lines = text.split('\n');
+            const efectivos = [];
+
+            for (let i = 1; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if (line === '') continue;
+
+                // Parsear CSV correctamente (maneja comillas)
+                const parts = [];
+                let current = '';
+                let inQuotes = false;
+
+                for (let j = 0; j < line.length; j++) {
+                    const char = line[j];
+                    if (char === '"') {
+                        inQuotes = !inQuotes;
+                    } else if (char === ',' && !inQuotes) {
+                        parts.push(current.trim());
+                        current = '';
+                    } else {
+                        current += char;
+                    }
+                }
+                parts.push(current.trim());
+
+                if (parts.length < 6) continue;
+
+                // Limpiar comillas de los valores
+                const clean = function(s) { return s.replace(/^"|"$/g, ''); };
+
+                const nombre = clean(parts[0]);
+                const diasDisponibles = parseInt(clean(parts[1])) || 0;
+                const diasUsados = parseInt(clean(parts[2])) || 0;
+                const diasRestantes = parseInt(clean(parts[3])) || 0;
+                const franja1Str = clean(parts[4]);
+                const franja2Str = clean(parts[5]);
+
+                // Parsear rangos de fechas (DD/MM/YYYY - DD/MM/YYYY)
+                function parseDateRange(rangeStr) {
+                    if (!rangeStr || rangeStr.trim() === '') return [];
+                    const match = rangeStr.match(/(\d{2}\/\d{2}\/\d{4})\s*-\s*(\d{2}\/\d{2}\/\d{4})/);
+                    if (!match) return [];
+
+                    const [_, startStr, endStr] = match;
+                    const [startDay, startMonth, startYear] = startStr.split('/').map(Number);
+                    const [endDay, endMonth, endYear] = endStr.split('/').map(Number);
+
+                    const startDate = new Date(startYear, startMonth - 1, startDay);
+                    const endDate = new Date(endYear, endMonth - 1, endDay);
+
+                    const dias = [];
+                    let current = new Date(startDate);
+                    while (current <= endDate) {
+                        const diaStr = formatearFechaLocal(current);
+                        if (!esDiaNoHabil(diaStr)) {
+                            dias.push(diaStr);
+                        }
+                        current.setDate(current.getDate() + 1);
+                    }
+                    return dias;
+                }
+
+                const franja1 = parseDateRange(franja1Str);
+                const franja2 = parseDateRange(franja2Str);
+                const todosDias = franja1.concat(franja2).sort();
+
+                const id = Date.now() + i;
+
+                efectivos.push({
+                    id: id,
+                    nombre: nombre,
+                    dni: '',
+                    diasDisponibles: diasDisponibles,
+                    fechaInicio: franja1.length > 0 ? franja1[0] : '',
+                    dias: todosDias,
+                    franja1: franja1,
+                    franja2: franja2
+                });
+            }
+
+            console.log('Total líneas:', lines.length);
+            console.log('Efectivos procesados:', efectivos.length);
+            console.log('Primer efectivo:', efectivos[0]);
+
+            if (efectivos.length > 0) {
+                const todos = cargarEfectivos();
+                todos.push(...efectivos);
+                guardarEfectivos(todos);
+                renderizarLista();
+                renderizarCalendario();
+                mostrarMensaje('Se importaron ' + efectivos.length + ' efectivos correctamente.', 'exito');
+            } else {
+                mostrarMensaje('No se encontraron datos válidos. Total líneas: ' + lines.length + '. Verificá el formato del CSV.', 'error');
+            }
+        };
+        reader.readAsText(file);
+    }
+
+    function cargarEfectivoEnFormulario(id) {
+        const efectivos = cargarEfectivos();
+        let ef = null;
+
+        for (let i = 0; i < efectivos.length; i++) {
+            if (efectivos[i].id === id) {
+                ef = efectivos[i];
+                break;
+            }
+        }
+
+        if (!ef) return;
+
+        editandoId = id;
+
+        document.getElementById('nombre').value = ef.nombre;
+        document.getElementById('dni').value = ef.dni;
+        document.getElementById('diasDisponibles').value = ef.diasDisponibles;
+        document.getElementById('fechaInicio').value = ef.fechaInicio;
+        document.getElementById('diasFranja1').value = ef.franja1.length;
+
+        if (ef.franja2.length > 0) {
+            document.getElementById('fechaInicioFranja2').value = ef.franja2[0];
+            document.getElementById('diasFranja2').value = ef.franja2.length;
+        } else {
+            document.getElementById('fechaInicioFranja2').value = '';
+            document.getElementById('diasFranja2').value = '';
+        }
+
+        document.getElementById('formTitulo').textContent = 'Editar efectivo';
+        document.getElementById('btnSubmit').textContent = 'Guardar cambios';
+        document.getElementById('btnCancelar').style.display = 'block';
+
+        renderizarCalendario();
+
+        document.querySelector('.form-section').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function cancelarEdicion() {
+        editandoId = null;
+
+        document.getElementById('nombre').value = '';
+        document.getElementById('dni').value = '';
+        document.getElementById('diasDisponibles').value = '';
+        document.getElementById('fechaInicio').value = '2026-12-01';
+        document.getElementById('diasFranja1').value = '';
+        document.getElementById('fechaInicioFranja2').value = '2027-02-01';
+        document.getElementById('diasFranja2').value = '';
+
+        document.getElementById('formTitulo').textContent = 'Registrar efectivo';
+        document.getElementById('btnSubmit').textContent = 'Añadir efectivo';
+        document.getElementById('btnCancelar').style.display = 'none';
+
+        renderizarCalendario();
+    }
+
+    function mostrarMensaje(texto, tipo) {
+        const msg = document.getElementById('mensaje');
+        msg.textContent = texto;
+        msg.className = 'mensaje ' + tipo;
+
+        setTimeout(function() {
+            msg.className = 'mensaje';
+        }, 5000);
+    }
+
+    function init() {
+        document.getElementById('fechaInicio').value = '2026-12-01';
+        document.getElementById('fechaInicioFranja2').value = '2027-02-01';
+
+        mesMostrado = new Date(2026, 11, 1);
+
+        document.getElementById('mesAnterior').addEventListener('click', function() {
+            mesMostrado.setMonth(mesMostrado.getMonth() - 1);
+            renderizarCalendario();
+        });
+
+        document.getElementById('mesSiguiente').addEventListener('click', function() {
+            mesMostrado.setMonth(mesMostrado.getMonth() + 1);
+            renderizarCalendario();
+        });
+
+        const campos = ['fechaInicio', 'diasFranja1', 'fechaInicioFranja2', 'diasFranja2'];
+        for (let i = 0; i < campos.length; i++) {
+            document.getElementById(campos[i]).addEventListener('input', renderizarCalendario);
+        }
+
+        document.getElementById('btnCancelar').addEventListener('click', cancelarEdicion);
+
+        document.getElementById('btnListado').addEventListener('click', abrirListado);
+        document.getElementById('btnCerrarModal').addEventListener('click', cerrarListado);
+        document.getElementById('btnExportar').addEventListener('click', exportarCSV);
+        document.getElementById('btnImportar').addEventListener('click', importarCSV);
+        document.getElementById('btnImprimir').addEventListener('click', imprimirListado);
+
+        document.getElementById('fileImport').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                procesarCSV(file);
+            }
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                cerrarListado();
+            }
+        });
+
+        document.getElementById('vacationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const nombre = document.getElementById('nombre').value;
+            const dni = document.getElementById('dni').value;
+            const diasDisponibles = parseInt(document.getElementById('diasDisponibles').value, 10) || 0;
+            const fechaInicio = document.getElementById('fechaInicio').value;
+            const diasF1 = parseInt(document.getElementById('diasFranja1').value, 10) || 0;
+            const fechaInicioF2 = document.getElementById('fechaInicioFranja2').value;
+            const diasF2 = parseInt(document.getElementById('diasFranja2').value, 10) || 0;
+
+            const error = validarFormulario(nombre, dni, diasDisponibles, fechaInicio, diasF1, fechaInicioF2, diasF2);
+
+            if (error) {
+                mostrarMensaje(error, 'error');
+                return;
+            }
+
+            if (editandoId !== null) {
+                actualizarEfectivo(editandoId, nombre, dni, diasDisponibles, fechaInicio, diasF1, fechaInicioF2, diasF2);
+                mostrarMensaje('Efectivo actualizado correctamente.', 'exito');
+                cancelarEdicion();
+            } else {
+                agregarEfectivo(nombre, dni, diasDisponibles, fechaInicio, diasF1, fechaInicioF2, diasF2);
+                mostrarMensaje('Efectivo registrado correctamente.', 'exito');
+
+                document.getElementById('nombre').value = '';
+                document.getElementById('dni').value = '';
+                document.getElementById('diasDisponibles').value = '';
+                document.getElementById('fechaInicio').value = '2026-12-01';
+                document.getElementById('diasFranja1').value = '';
+                document.getElementById('fechaInicioFranja2').value = '2027-02-01';
+                document.getElementById('diasFranja2').value = '';
+            }
+
+            renderizarLista();
+            renderizarCalendario();
+        });
+
+        renderizarCalendario();
+        renderizarLista();
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+    </script>
 </body>
 </html>
