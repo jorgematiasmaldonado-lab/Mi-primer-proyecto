@@ -652,6 +652,24 @@
             font-style: italic;
         }
 
+        .btn-cerrar-sesion {
+            margin-top: 12px;
+            padding: 8px 16px;
+            background: #742a2a;
+            color: #feb2b2;
+            border: 1px solid #9b2c2c;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .btn-cerrar-sesion:hover {
+            background: #9b2c2c;
+            color: white;
+        }
+
         .modal {
             position: fixed;
             top: 0;
@@ -863,6 +881,80 @@
             }
         }
 
+        .login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #1a202c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .login-box {
+            background: #2d3748;
+            border-radius: 12px;
+            padding: 30px;
+            width: 320px;
+            border: 1px solid #4a5568;
+            text-align: center;
+        }
+
+        .login-box h2 {
+            color: #e2e8f0;
+            margin-bottom: 20px;
+            border-bottom: none;
+        }
+
+        .login-box input {
+            margin-bottom: 12px;
+        }
+
+        .login-box button {
+            width: 100%;
+            padding: 12px;
+            background: #2b6cb0;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+
+        .login-box button:hover {
+            background: #3182ce;
+        }
+
+        .login-box .recuperar {
+            color: #63b3ed;
+            font-size: 0.85rem;
+            cursor: pointer;
+            margin-top: 12px;
+            display: block;
+        }
+
+        .login-box .recuperar:hover {
+            text-decoration: underline;
+        }
+
+        .login-box .error {
+            color: #fc8181;
+            font-size: 0.85rem;
+            margin-top: 8px;
+        }
+
+        .login-box .logo {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: 5px;
+            margin-bottom: 5px;
+        }
+
         @media (max-width: 480px) {
             body {
                 padding: 12px;
@@ -911,12 +1003,25 @@
     </style>
 </head>
 <body>
+    <div id="loginOverlay" class="login-overlay">
+        <div class="login-box">
+            <div class="logo">ETAC</div>
+            <h2 id="loginTitulo">Iniciar Sesión</h2>
+            <input type="text" id="loginUsuario" placeholder="Usuario" autocomplete="off">
+            <input type="password" id="loginClave" placeholder="Contraseña">
+            <button type="button" id="btnLogin">Ingresar</button>
+            <a class="recuperar" id="btnRecuperar">Olvidé mi contraseña</a>
+            <p id="loginError" class="error"></p>
+        </div>
+    </div>
+
     <div class="container">
         <header>
             <div class="logo">ETAC</div>
             <h1>Cronograma de Licencia anual</h1>
             <p class="subtitle">Guardia A - BASE PUNILLA</p>
             <p class="autor">© 2026 Maldonado Jorge Matias - Todos los derechos reservados</p>
+            <button type="button" class="btn-cerrar-sesion" id="btnCerrarSesion">Cerrar Sesión</button>
         </header>
 
         <section class="form-section">
@@ -1048,6 +1153,91 @@
     // ETAC - Cronograma de Licencia Anual
     // Guardia A - BASE PUNILLA
     // Diseñado por: Maldonado Jorge Matias
+    // ============================================
+
+    // ============================================
+    // SISTEMA DE USUARIOS
+    // Para agregar usuarios: copiá una línea y modificá usuario y clave
+    // Para desactivar: cambiá activo: true por activo: false
+    // Para cambiar contraseña: modificá el valor de clave
+    // ============================================
+    const USUARIOS = [
+        { usuario: 'admin', clave: 'etac2026', activo: true, rol: 'admin' },
+        { usuario: 'jorge', clave: 'licencias', activo: true, rol: 'usuario' }
+    ];
+
+    const CLAVE_RECUPERACION = 'ETAC-2026';
+    let usuarioActual = null;
+
+    function verificarLogin() {
+        const usuario = document.getElementById('loginUsuario').value.trim();
+        const clave = document.getElementById('loginClave').value;
+        const errorMsg = document.getElementById('loginError');
+
+        const user = USUARIOS.find(u => u.usuario === usuario && u.clave === clave);
+
+        if (!user) {
+            errorMsg.textContent = 'Usuario o contraseña incorrectos.';
+            return;
+        }
+
+        if (!user.activo) {
+            errorMsg.textContent = 'Este usuario está desactivado.';
+            return;
+        }
+
+        usuarioActual = user;
+        document.getElementById('loginOverlay').style.display = 'none';
+        mostrarMensaje('Bienvenido, ' + user.usuario, 'exito');
+    }
+
+    function recuperarClave() {
+        const codigo = prompt('Ingresá el código de recuperación:');
+        if (codigo === CLAVE_RECUPERACION) {
+            const usuario = prompt('Ingresá tu nombre de usuario:');
+            const user = USUARIOS.find(u => u.usuario === usuario);
+            if (user) {
+                const nuevaClave = prompt('Ingresá la nueva contraseña:');
+                if (nuevaClave && nuevaClave.trim() !== '') {
+                    alert('Contraseña actualizada temporalmente a: ' + nuevaClave + '\n\nPara hacerla permanente, editá el array USUARIOS en el código.');
+                }
+            } else {
+                alert('Usuario no encontrado.');
+            }
+        } else {
+            alert('Código de recuperación incorrecto.');
+        }
+    }
+
+    // ============================================
+    // CERRAR SESIÓN Y AUTO-CIERRE POR INACTIVIDAD
+    // ============================================
+
+    let temporizadorInactividad = null;
+    const TIEMPO_INACTIVIDAD = 20 * 60 * 1000; // 20 minutos en milisegundos
+
+    function cerrarSesion() {
+        usuarioActual = null;
+        document.getElementById('loginOverlay').style.display = 'flex';
+        document.getElementById('loginUsuario').value = '';
+        document.getElementById('loginClave').value = '';
+        document.getElementById('loginError').textContent = '';
+        reiniciarTemporizador();
+    }
+
+    function reiniciarTemporizador() {
+        if (temporizadorInactividad) {
+            clearTimeout(temporizadorInactividad);
+        }
+        temporizadorInactividad = setTimeout(function() {
+            if (usuarioActual) {
+                cerrarSesion();
+            }
+        }, TIEMPO_INACTIVIDAD);
+    }
+
+    // ============================================
+    // DATOS Y CONFIGURACIÓN
     // ============================================
 
     const FERIADOS = {
@@ -1886,6 +2076,26 @@
     }
 
     function init() {
+        // Mostrar pantalla de login primero
+        document.getElementById('btnLogin').addEventListener('click', verificarLogin);
+        document.getElementById('btnRecuperar').addEventListener('click', recuperarClave);
+
+        // Botón de cerrar sesión
+        document.getElementById('btnCerrarSesion').addEventListener('click', cerrarSesion);
+
+        // Permitir login con Enter
+        document.getElementById('loginClave').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') verificarLogin();
+        });
+        document.getElementById('loginUsuario').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') verificarLogin();
+        });
+
+        // Reiniciar temporizador de inactividad con cualquier actividad del usuario
+        ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach(function(evento) {
+            document.addEventListener(evento, reiniciarTemporizador);
+        });
+
         document.getElementById('fechaInicio').value = '2026-12-01';
         document.getElementById('fechaInicioFranja2').value = '2027-02-01';
 

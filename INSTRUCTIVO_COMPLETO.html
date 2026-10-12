@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ETAC - Instructivo Completo del Proyecto</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+            background: #ffffff;
+            color: #1a202c;
+            line-height: 1.8;
+            padding: 40px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #2b6cb0;
+            text-align: center;
+            margin-bottom: 10px;
+            border-bottom: 3px solid #2b6cb0;
+            padding-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            color: #2b6cb0;
+            margin-top: 40px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            font-size: 1.4rem;
+            color: #2d3748;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+
+        h4 {
+            font-size: 1.1rem;
+            color: #4a5568;
+            margin-top: 20px;
+            margin-bottom: 8px;
+        }
+
+        p {
+            margin-bottom: 12px;
+        }
+
+        ul, ol {
+            margin-left: 30px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #2b6cb0;
+            letter-spacing: 10px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #718096;
+            margin-bottom: 5px;
+        }
+
+        .section {
+            background: #f7fafc;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #2b6cb0;
+        }
+
+        .warning {
+            background: #fff5f5;
+            border-left: 4px solid #c53030;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+        }
+
+        .info {
+            background: #ebf8ff;
+            border-left: 4px solid #3182ce;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+        }
+
+        .success {
+            background: #f0fff4;
+            border-left: 4px solid #38a169;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 0.9rem;
+        }
+
+        th, td {
+            padding: 10px 12px;
+            text-align: left;
+            border: 1px solid #e2e8f0;
+        }
+
+        th {
+            background: #2b6cb0;
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: #f7fafc;
+        }
+
+        code {
+            background: #edf2f7;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+        }
+
+        pre {
+            background: #1a202c;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        .step {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+
+        .step-number {
+            display: inline-block;
+            background: #2b6cb0;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 28px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .toc {
+            background: #f7fafc;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .toc ul {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .toc li {
+            padding: 5px 0;
+        }
+
+        .toc a {
+            color: #2b6cb0;
+            text-decoration: none;
+        }
+
+        .toc a:hover {
+            text-decoration: underline;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 2px solid #e2e8f0;
+            color: #718096;
+            font-size: 0.9rem;
+        }
+
+        @media print {
+            body {
+                padding: 20px;
+            }
+
+            .section {
+                page-break-inside: avoid;
+            }
+
+            h2 {
+                page-break-after: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="logo">ETAC</div>
+        <h1>Instructivo Completo del Proyecto</h1>
+        <p class="subtitle">Cronograma de Licencia Anual</p>
+        <p class="subtitle">Guardia A - BASE PUNILLA</p>
+    </div>
+
+    <div class="toc">
+        <h2>Índice</h2>
+        <ul>
+            <li><a href="#resumen">1. Resumen del Proyecto</a></li>
+            <li><a href="#arquitectura">2. Arquitectura del Sistema</a></li>
+            <li><a href="#archivos">3. Archivos del Proyecto</a></li>
+            <li><a href="#instalacion">4. Instalación y Configuración</a></li>
+            <li><a href="#uso">5. Guía de Uso</a></li>
+            <li><a href="#seguridad">6. Sistema de Seguridad</a></li>
+            <li><a href="#gestion-usuarios">7. Gestión de Usuarios</a></li>
+            <li><a href="#codigo-completo">8. Código Completo de los Archivos</a></li>
+            <li><a href="#prompt-reconstruccion">9. Prompt para Reconstruir la Aplicación</a></li>
+        </ul>
+    </div>
+
+    <h2 id="resumen">1. Resumen del Proyecto</h2>
+
+    <div class="section">
+        <h3>1.1 Descripción del Sistema</h3>
+        <p>El <strong>Cronograma de Licencia Anual</strong> es una aplicación web desarrollada para <strong>ETAC - Guardia A, BASE PUNILLA</strong>, diseñada para gestionar y organizar las licencias anuales del personal de manera eficiente y transparente.</p>
+        <p>La aplicación permite registrar efectivos, asignar franjas de licencia, visualizar un calendario interactivo con la distribución de licencias, y generar reportes exportables para respaldo físico o digital.</p>
+    </div>
+
+    <div class="section">
+        <h3>1.2 Objetivos del Sistema</h3>
+        <ul>
+            <li>Centralizar la información de licencias del personal en el navegador.</li>
+            <li>Permitir que múltiples usuarios vean y modifiquen los datos.</li>
+            <li>Visualizar de forma clara la distribución de licencias en un calendario interactivo.</li>
+            <li>Controlar el cupo máximo de personas simultáneas en licencia (máximo 3).</li>
+            <li>Generar reportes imprimibles y exportables para respaldo administrativo.</li>
+            <li>Llevar un control de días disponibles, usados y restantes por efectivo.</li>
+            <li>Implementar un sistema de seguridad con login y gestión de usuarios.</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h3>1.3 Características Principales</h3>
+        <ul>
+            <li>Registro de efectivos con datos personales y días disponibles.</li>
+            <li>Asignación de hasta dos franjas de licencia por efectivo.</li>
+            <li>Calendario interactivo con tooltips informativos.</li>
+            <li>Detección visual de días que superan el cupo máximo.</li>
+            <li>Edición y eliminación de registros existentes.</li>
+            <li>Exportación de datos en formato CSV.</li>
+            <li>Importación de datos desde CSV.</li>
+            <li>Impresión de listados para respaldo físico.</li>
+            <li>Sistema de autenticación con usuarios y contraseñas.</li>
+            <li>Recuperación de contraseña mediante código de seguridad.</li>
+            <li>Cierre de sesión manual y automático por inactividad.</li>
+            <li>Almacenamiento en el navegador mediante localStorage.</li>
+        </ul>
+    </div>
+
+    <h2 id="arquitectura">2. Arquitectura del Sistema</h2>
+
+    <div class="section">
+        <h3>2.1 Tecnologías Utilizadas</h3>
+        <table>
+            <tr>
+                <th>Tecnología</th>
+                <th>Descripción</th>
+            </tr>
+            <tr>
+                <td>HTML5</td>
+                <td>Estructura del documento y contenido de la aplicación.</td>
+            </tr>
+            <tr>
+                <td>CSS3</td>
+                <td>Estilos, diseño visual y responsive de la aplicación.</td>
+            </tr>
+            <tr>
+                <td>JavaScript</td>
+                <td>Lógica de la aplicación y manipulación del DOM.</td>
+            </tr>
+            <tr>
+                <td>localStorage</td>
+                <td>Almacenamiento de datos en el navegador del usuario.</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <h3>2.2 Flujo de Datos</h3>
+        <ol>
+            <li>El usuario abre <code>index.html</code> en el navegador.</li>
+            <li>Se muestra la pantalla de login para autenticación.</li>
+            <li>Una vez autenticado, se muestra la aplicación principal.</li>
+            <li>Los datos se almacenan en <code>localStorage</code> del navegador.</li>
+            <li>El usuario puede exportar los datos en formato CSV para respaldo.</li>
+            <li>Los datos pueden ser importados desde otro dispositivo.</li>
+        </ol>
+    </div>
+
+    <div class="section">
+        <h3>2.3 Diagrama de Arquitectura</h3>
+        <pre>
+┌─────────────────────────────────────────────────────────┐
+│                    Navegador Web                          │
+│  ┌───────────────────────────────────────────────────┐  │
+│  │              index.html (Todo en uno)              │  │
+│  │  ┌─────────────────────────────────────────────┐  │  │
+│  │  │           CSS (Estilos)                      │  │  │
+│  │  └─────────────────────────────────────────────┘  │  │
+│  │  ┌─────────────────────────────────────────────┐  │  │
+│  │  │           JavaScript (Lógica)                │  │  │
+│  │  │  - Sistema de Usuarios                      │  │  │
+│  │  │  - Calendario                                │  │  │
+│  │  │  - Gestión de Efectivos                      │  │  │
+│  │  │  - Importar/Exportar CSV                     │  │  │
+│  │  └─────────────────────────────────────────────┘  │  │
+│  │  ┌─────────────────────────────────────────────┐  │  │
+│  │  │           localStorage                       │  │  │
+│  │  │  (Almacenamiento de datos)                   │  │  │
+│  │  └─────────────────────────────────────────────┘  │  │
+│  └───────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────┘
+        </pre>
+    </div>
+
+    <h2 id="archivos">3. Archivos del Proyecto</h2>
+
+    <div class="section">
+        <h3>3.1 Estructura de Archivos</h3>
+        <table>
+            <tr>
+                <th>Archivo</th>
+                <th>Descripción</th>
+                <th>Tamaño</th>
+            </tr>
+            <tr>
+                <td><code>index.html</code></td>
+                <td>Aplicación completa con CSS y JS incluidos.</td>
+                <td>~63 KB</td>
+            </tr>
+            <tr>
+                <td><code>styles.css</code></td>
+                <td>Estilos por separado (opcional).</td>
+                <td>~17 KB</td>
+            </tr>
+            <tr>
+                <td><code>app.js</code></td>
+                <td>Lógica por separado (opcional).</td>
+                <td>~7 KB</td>
+            </tr>
+            <tr>
+                <td><code>MANUAL_INSTRUCTIVO.html</code></td>
+                <td>Manual instructivo del proyecto.</td>
+                <td>~83 KB</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <h3>3.2 Explicación de Cada Archivo</h3>
+
+        <h4>index.html</h4>
+        <p>Archivo principal de la aplicación. Contiene:</p>
+        <ul>
+            <li>Estructura HTML5 del documento.</li>
+            <li>Estilos CSS en la sección <code>&lt;style&gt;</code>.</li>
+            <li>Lógica JavaScript en la sección <code>&lt;script&gt;</code>.</li>
+            <li>Sistema de login y gestión de usuarios.</li>
+            <li>Calendario interactivo con tooltips.</li>
+            <li>Formulario de registro de efectivos.</li>
+            <li>Lista de efectivos registrados.</li>
+            <li>Modal para ver listado completo.</li>
+            <li>Funciones de importar y exportar CSV.</li>
+        </ul>
+
+        <h4>styles.css</h4>
+        <p>Archivo de estilos por separado. Contiene:</p>
+        <ul>
+            <li>Variables de diseño (colores, tipografía).</li>
+            <li>Estilos del login.</li>
+            <li>Estilos del formulario.</li>
+            <li>Estilos del calendario.</li>
+            <li>Estilos de la lista de efectivos.</li>
+            <li>Estilos del modal de listado.</li>
+            <li>Estilos para impresión.</li>
+            <li>Media queries para diseño responsive.</li>
+        </ul>
+
+        <h4>app.js</h4>
+        <p>Archivo de lógica por separado. Contiene:</p>
+        <ul>
+            <li>Configuración de feriados.</li>
+            <li>Configuración de usuarios del sistema.</li>
+            <li>Funciones de autenticación (login, logout).</li>
+            <li>Funciones de gestión de efectivos (CRUD).</li>
+            <li>Funciones de cálculo de días hábiles.</li>
+            <li>Funciones de importar y exportar CSV.</li>
+            <li>Funciones de renderizado del calendario y la lista.</li>
+        </ul>
+    </div>
+
+    <h2 id="instalacion">4. Instalación y Configuración</h2>
+
+    <div class="section">
+        <h3>4.1 Requisitos del Sistema</h3>
+        <ul>
+            <li><strong>Navegador web:</strong> Google Chrome, Microsoft Edge, Mozilla Firefox o Safari (cualquier versión moderna).</li>
+            <li><strong>Sistema operativo:</strong> Windows, macOS, Linux o cualquier sistema con navegador.</li>
+            <li><strong>Conexión a internet:</strong> No necesaria para usar la aplicación.</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h3>4.2 Instalación</h3>
+        <div class="step">
+            <p><span class="step-number">1</span>Descargar la carpeta <code>ETAC - Cronograma de vacaciones</code> desde el medio de almacenamiento compartido (USB, OneDrive, Google Drive, etc.).</p>
+        </div>
+        <div class="step">
+            <p><span class="step-number">2</span>Si la carpeta está comprimida (.zip), descomprimirla en el escritorio o en la carpeta de documentos.</p>
+        </div>
+        <div class="step">
+            <p><span class="step-number">3</span>Verificar que estén los archivos: <code>index.html</code>, <code>styles.css</code> y <code>app.js</code>.</p>
+        </div>
+        <div class="step">
+            <p><span class="step-number">4</span>Hacer doble clic en <code>index.html</code> para abrir la aplicación en el navegador predeterminado.</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <h3>4.3 Configuración del Navegador</h3>
+        <p>La aplicación funciona en cualquier navegador moderno. Se recomienda usar <strong>Microsoft Edge</strong> o <strong>Google Chrome</strong> para mejor compatibilidad.</p>
+        <div class="info">
+            <strong>Nota:</strong> Si al abrir la aplicación no carga correctamente, presionar <code>Ctrl + F5</code> para forzar la recarga completa de la página.
+        </div>
+    </div>
+
+    <h2 id="uso">5. Guía de Uso</h2>
+
+    <div class="section">
+        <h3>5.1 Iniciar Sesión</h3>
+        <div class="step">
+            <p><span class="step-number">1</span>Abrir la aplicación haciendo doble clic en <code>index.html</code>.</p>
+        </div>
+        <div class="step">
+            <p><span class="step-number">2</span>Aparece la pantalla de login con el logo ETAC.</p>
+        </div>
+        <div class="step">
+            <p><span class="step-number">3</span>Ingresar usuario y contraseña.</p>
+        </div>
+        <div class="step">
+            <p><span class="step-number">4</span>Hacer clic en <strong>"Ingresar"</strong> o presionar <strong>Enter</strong>.</p>
+        </div>
+        <div class="step">
+            <p><span class="step-number">5</span>Si los datos son correctos, se muestra la aplicación.</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <h3>5.2 Registrar un Efectivo</h3>
+        <div class="step">
+            <p><span class="step-number">1</span>En el formulario, completar los campos:</p>
+            <ul>
+                <li><strong>Apellido y Nombre:</strong> Formato "Apellido, Nombre" (ej: García, Juan).</li>
+                <li><strong>DNI:</strong> Número de documento sin puntos ni espacios.</li>
+                <li><strong>Días hábiles disponibles:</strong> Total de días de licencia que le corresponden al efectivo.</li>
+            </ul>
+        </div>
+        <div class="step">
+            <p><span class="step-number">2</span>En <strong>Primera franja</strong>, seleccionar la fecha de inicio y la cantidad de días hábiles.</p>
+        </div>
+        <div class="step">
+            <p><span class="step-number">3</span>En <strong>Segunda franja</strong> (opcional), seleccionar la fecha de inicio y la cantidad de días hábiles.</p>
+        </div>
+        <div class="step">
+            <p><span class="step-number">4</span>Verificar que el calendario muestre los días asignados correctamente.</p>
+        </div>
+        <div class="step">
+            <p><span class="step-number">5</span>Hacer clic en <strong>"Añadir efectivo"</strong>.</p>
+        </div>
+        <div class="step">
+            <p><span class="step-number">6</span>El efectivo aparecerá en la lista de "Efectivos registrados".</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <h3>5.3 Editar un Efectivo</h3>
+        <div class="step">
+            <p><span class="step-number">1</span>En la lista de efectivos, hacer clic en el botón <strong>"Editar"</strong> del efectivo que se desea modificar.</p>
+        </div>
+        <div class="step">
+            <p><span class="step-number">2</span>Los datos del efectivo se cargarán automáticamente en el formulario.</p>
+        </div>
+        <div class="step">
+            <p><span class="step-number">3</span>Modificar los campos necesarios.</p>
+        </div>
+        <div class="step">
+            <p><span class="step-number">4</span>Hacer clic en <strong>"Guardar cambios"</strong>.</p>
+        </div>
+        <div class="step">
+            <p><span class="step-number">5</span>Para cancelar la edición, hacer clic en <strong>"Cancelar edición"</strong>.</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <h3>5.4 Eliminar un Efectivo</h3>
+        <div class="step">
+            <p><span class="step-number">1</span>En la lista de efectivos, hacer clic en el botón <strong>"Eliminar"</strong> del efectivo que se desea quitar.</p>
+        </div>
+        <div class="step">
+            <p><span class="step-number">2</span>Aparece un cartel de confirmación: "¿Estás seguro de que querés eliminar a [Nombre]? Esta acción no se puede deshacer."</p>
+        </div>
+        <div class="step">
+            <p><span class="step-number">3</span>Si se acepta, el efectivo se eliminará automáticamente.</p>
+        </div>
+        <div class="warning">
+            <strong>Advertencia:</strong> La eliminación es permanente. No se puede deshacer.
+        </div>
+    </div>
+
+    <div class="section">
+        <h3>5.5 Usar el Calendario</h3>
+        <p>El calendario muestra la distribución de licencias con los siguientes colores:</p>
+        <table>
+            <tr>
+                <th>Color</th>
+                <th>Significado</th>
+            </tr>
+            <tr>
+                <td><span style="color: #2b6cb0;">■ Azul</span></td>
+                <td>Día de primera franja</td>
+            </tr>
+            <tr>
+                <td><span style="color: #2f855a;">■ Verde</span></td>
+                <td>Día de segunda franja</td>
+            </tr>
+            <tr>
+                <td><span style="color: #742a2a;">■ Rojo oscuro</span></td>
+                <td>Día ocupado (1-3 personas)</td>
+            </tr>
+            <tr>
+                <td><span style="color: #c53030;">■ Rojo brillante</span></td>
+                <td>Día prohibido (más de 3 personas)</td>
+            </tr>
+            <tr>
+                <td><span style="color: #744210;">■ Marrón</span></td>
+                <td>Día feriado</td>
+            </tr>
+            <tr>
+                <td><span style="color: #4a5568;">■ Gris</span></td>
+                <td>Día libre</td>
+            </tr>
+        </table>
+        <h4>Navegación del calendario</h4>
+        <ul>
+            <li>Usar los botones <strong>"← Anterior"</strong> y <strong>"Siguiente →"</strong> para cambiar de mes.</li>
+            <li>Pasar el cursor sobre un día para ver información detallada (tooltip).</li>
+            <li>En dispositivos táctiles, tocar un día para ver la información.</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h3>5.6 Ver Listado Completo</h3>
+        <div class="step">
+            <p><span class="step-number">1</span>Hacer clic en el botón <strong>"Ver listado"</strong> (arriba a la derecha de la lista de efectivos).</p>
+        </div>
+        <div class="step">
+            <p><span class="step-number">2</span>Se abre una ventana con una tabla que muestra todos los efectivos ordenados alfabéticamente.</p>
+        </div>
+        <div class="step">
+            <p><span class="step-number">3</span>La tabla incluye: Apellido y Nombre, Días disponibles, Días usados, Días restantes, 1ª Franja y 2ª Franja.</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <h3>5.7 Exportar a CSV</h3>
+        <div class="step">
+            <p><span class="step-number">1</span>Abrir el listado completo (botón "Ver listado").</p>
+        </div>
+        <div class="step">
+            <p><span class="step-number">2</span>Hacer clic en <strong>"Exportar CSV"</strong>.</p>
+        </div>
+        <div class="step">
+            <p><span class="step-number">3</span>Se descarga un archivo llamado <code>listado_efectivos_etac.csv</code>.</p>
+        </div>
+        <div class="step">
+            <p><span class="step-number">4</span>Abrir el archivo con Excel, Google Sheets o cualquier programa de hojas de cálculo.</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <h3>5.8 Importar CSV</h3>
+        <div class="step">
+            <p><span class="step-number">1</span>Abrir el listado completo (botón "Ver listado").</p>
+        </div>
+        <div class="step">
+            <p><span class="step-number">2</span>Hacer clic en <strong>"Importar CSV"</strong>.</p>
+        </div>
+        <div class="step">
+            <p><span class="step-number">3</span>Seleccionar el archivo CSV a importar.</p>
+        </div>
+        <div class="step">
+            <p><span class="step-number">4</span>Los datos se cargan automáticamente a la aplicación.</p>
+        </div>
+        <div class="info">
+            <strong>Formato del CSV:</strong> El archivo debe tener las columnas: Apellido y Nombre, Días disponibles, Días usados, Días restantes, 1ª Franja (Inicio - Fin), 2ª Franja (Inicio - Fin).
+        </div>
+    </div>
+
+    <div class="section">
+        <h3>5.9 Imprimir el Listado</h3>
+        <div class="step">
+            <p><span class="step-number">1</span>Abrir el listado completo (botón "Ver listado").</p>
+        </div>
+        <div class="step">
+            <p><span class="step-number">2</span>Hacer clic en <strong>"Imprimir"</strong>.</p>
+        </div>
+        <div class="step">
+            <p><span class="step-number">3</span>Se abre el diálogo de impresión del navegador.</p>
+        </div>
+        <div class="step">
+            <p><span class="step-number">4</span>Seleccionar la impresora y hacer clic en <strong>"Imprimir"</strong>.</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <h3>5.10 Cerrar Sesión</h3>
+        <div class="step">
+            <p><span class="step-number">1</span>Hacer clic en el botón <strong>"Cerrar Sesión"</strong> en el encabezado.</p>
+        </div>
+        <div class="step">
+            <p><span class="step-number">2</span>La aplicación vuelve a la pantalla de login.</p>
+        </div>
+    </div>
+
+    <h2 id="seguridad">6. Sistema de Seguridad</h2>
+
+    <div class="section">
+        <h3>6.1 Pantalla de Login</h3>
+        <p>Al abrir la aplicación, aparece una pantalla de login con:</p>
+        <ul>
+            <li>Campo <strong>Usuario</strong></li>
+            <li>Campo <strong>Contraseña</strong></li>
+            <li>Botón <strong>"Ingresar"</strong></li>
+            <li>Enlace <strong>"Olvidé mi contraseña"</strong></li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h3>6.2 Verificación de Credenciales</h3>
+        <p>El sistema verifica:</p>
+        <ul>
+            <li>Que el usuario exista en el sistema.</li>
+            <li>Que la contraseña sea correcta.</li>
+            <li>Que el usuario esté activo (no desactivado).</li>
+        </ul>
+        <p>Si alguna verificación falla, se muestra un mensaje de error.</p>
+    </div>
+
+    <div class="section">
+        <h3>6.3 Recuperación de Contraseña</h3>
+        <div class="step">
+            <p><span class="step-number">1</span>Hacer clic en <strong>"Olvidé mi contraseña"</strong>.</p>
+        </div>
+        <div class="step">
+            <p><span class="step-number">2</span>Ingresar el código de recuperación: <code>ETAC-2026</code>.</p>
+        </div>
+        <div class="step">
+            <p><span class="step-number">3</span>Ingresar el nombre de usuario.</p>
+        </div>
+        <div class="step">
+            <p><span class="step-number">4</span>Crear una nueva contraseña.</p>
+        </div>
+        <div class="warning">
+            <strong>Importante:</strong> La nueva contraseña es temporal. Para hacerla permanente, se debe editar el array <code>USUARIOS</code> en el código.
+        </div>
+    </div>
+
+    <div class="section">
+        <h3>6.4 Auto-cierre por Inactividad</h3>
+        <p>Después de <strong>20 minutos</strong> sin usar la aplicación, la sesión se cierra automáticamente.</p>
+        <p>Si el usuario está usando la aplicación (moviendo el mouse, escribiendo, etc.), el temporizador se reinicia.</p>
+    </div>
+
+    <h2 id="gestion-usuarios">7. Gestión de Usuarios</h2>
+
+    <div class="section">
+        <h3>7.1 Usuarios Iniciales</h3>
+        <table>
+            <tr>
+                <th>Usuario</th>
+                <th>Contraseña</th>
+                <th>Rol</th>
+                <th>Estado</th>
+            </tr>
+            <tr>
+                <td><code>admin</code></td>
+                <td><code>etac2026</code></td>
+                <td>Administrador</td>
+                <td>Activo</td>
+            </tr>
+            <tr>
+                <td><code>jorge</code></td>
+                <td><code>licencias</code></td>
+                <td>Usuario</td>
+                <td>Activo</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <h3>7.2 Agregar un Nuevo Usuario</h3>
+        <ol>
+            <li>Abrir el archivo <code>index.html</code> con el Bloc de notas.</li>
+            <li>Buscar la sección <code>SISTEMA DE USUARIOS</code>.</li>
+            <li>Copiar la línea de un usuario existente.</li>
+            <li>Modificar el nombre de usuario y la contraseña.</li>
+            <li>Guardar el archivo.</li>
+        </ol>
+        <pre>// Ejemplo: agregar un usuario nuevo
+{ usuario: 'nombrenuevo', clave: 'clave123', activo: true, rol: 'usuario' },</pre>
+    </div>
+
+    <div class="section">
+        <h3>7.3 Desactivar un Usuario</h3>
+        <ol>
+            <li>Abrir el archivo <code>index.html</code> con el Bloc de notas.</li>
+            <li>Buscar el usuario en la sección <code>SISTEMA DE USUARIOS</code>.</li>
+            <li>Cambiar <code>activo: true</code> por <code>activo: false</code>.</li>
+            <li>Guardar el archivo.</li>
+        </ol>
+    </div>
+
+    <div class="section">
+        <h3>7.4 Cambiar la Contraseña de un Usuario</h3>
+        <ol>
+            <li>Abrir el archivo <code>index.html</code> con el Bloc de notas.</li>
+            <li>Buscar el usuario en la sección <code>SISTEMA DE USUARIOS</code>.</li>
+            <li>Modificar el valor de <code>clave</code>.</li>
+            <li>Guardar el archivo.</li>
+        </ol>
+    </div>
+
+    <div class="section">
+        <h3>7.5 Cambiar el Código de Recuperación</h3>
+        <ol>
+            <li>Abrir el archivo <code>index.html</code> con el Bloc de notas.</li>
+            <li>Buscar la constante <code>CLAVE_RECUPERACION</code>.</li>
+            <li>Modificar el valor por el código deseado.</li>
+            <li>Guardar el archivo.</li>
+        </ol>
+    </div>
+
+    <h2 id="codigo-completo">8. Código Completo de los Archivos</h2>
+
+    <div class="section">
+        <h3>8.1 Archivo: index.html (Versión Todo-en-Uno)</h3>
+        <p>Este es el archivo principal que contiene todo el CSS y JavaScript incluidos. Es el único archivo necesario para que la aplicación funcione.</p>
+        <p>Para ver el código completo, abrir el archivo <code>index.html</code> con el Bloc de notas.</p>
+    </div>
+
+    <div class="section">
+        <h3>8.2 Estructura del Código</h3>
+        <pre>
+index.html
+├── &lt;head&gt;
+│   └── &lt;style&gt;
+│       ├── Variables de diseño
+│       ├── Estilos del login
+│       ├── Estilos del formulario
+│       ├── Estilos del calendario
+│       ├── Estilos de la lista
+│       ├── Estilos del modal
+│       └── Media queries (responsive)
+├── &lt;body&gt;
+│   ├── #loginOverlay (Pantalla de login)
+│   ├── .container
+│   │   ├── header (Logo, título, botón cerrar sesión)
+│   │   ├── section.form-section (Formulario)
+│   │   ├── section.list-section (Lista de efectivos)
+│   │   └── footer
+│   ├── #modalListado (Modal de listado)
+│   ├── #tooltip (Tooltip del calendario)
+│   └── &lt;script&gt;
+│       ├── SISTEMA DE USUARIOS
+│       ├── CERRAR SESIÓN Y AUTO-CIERRE
+│       ├── DATOS Y CONFIGURACIÓN
+│       ├── Funciones de utilidad
+│       ├── Gestión de datos (localStorage)
+│       ├── Calendario
+│       ├── Tooltip
+│       ├── Validación
+│       ├── CRUD de efectivos
+│       ├── Listado exportable
+│       └── Inicialización
+</pre>
+    </div>
+
+    <h2 id="prompt-reconstruccion">9. Prompt para Reconstruir la Aplicación</h2>
+
+    <div class="section">
+        <h3>9.1 Prompt Original (Modificado con Todas las Funciones)</h3>
+        <p>Para reconstruir la aplicación desde cero, copiá y pegá el siguiente prompt:</p>
+        <pre>Actúa como desarrollador frontend senior que escribe código simple, claro y fácil de entender para alguien que está empezando a programar.
+
+Quiero crear desde cero "ETAC - Cronograma de Licencia Anual", una web para registrar las licencias anuales de un grupo de personas y organizarlo ordenadamente. La aplicación es para ETAC - Guardia A, BASE PUNILLA. Diseñado por: Maldonado Jorge Matias.
+
+La web se construirá con HTML, CSS y JavaScript, sin frameworks, sin librerías y sin compilar nada. Tiene que funcionar abriendo index.html con doble clic, sin servidor ni instalación.
+
+Funcionalidades requeridas:
+
+1. SISTEMA DE SEGURIDAD:
+   - Pantalla de login con usuario y contraseña
+   - Usuarios definidos en un array en el código (modificables)
+   - Posibilidad de agregar, desactivar usuarios desde el código
+   - Recuperación de contraseña con código de seguridad
+   - Botón de "Cerrar Sesión"
+   - Auto-cierre de sesión después de 20 minutos de inactividad
+   - Si el usuario está usando la app, el temporizador se reinicia
+
+2. FORMULARIO DE REGISTRO:
+   - Campo "Apellido y Nombre" (obligatorio)
+   - Campo "DNI" (obligatorio)
+   - Campo "Días hábiles disponibles" (obligatorio, número mayor que 0)
+   - Primera franja: fecha de inicio + días hábiles
+   - Segunda franja: fecha de inicio + días hábiles (opcional)
+   - Botón "Añadir efectivo"
+   - Botón "Cancelar edición" (aparece al editar)
+
+3. CALENDARIO INTERACTIVO:
+   - Vista mensual con navegación (anterior/siguiente)
+   - Colores: azul (1ª franja), verde (2ª franja), rojo oscuro (ocupado), rojo brillante (prohibido), marrón (feriado), gris (libre)
+   - Tooltip al pasar el mouse: muestra fecha, feriados, personas en licencia
+   - Leyenda de colores
+   - Contador de días por franja
+
+4. LISTA DE EFECTIVOS:
+   - Ordenada alfabéticamente
+   - Muestra: nombre, DNI, días disponibles, usados, restantes
+   - Botones: Detalles, Editar, Eliminar
+   - Confirmación antes de eliminar
+   - Indicador visual de "Prohibido" (más de 3 personas)
+
+5. LISTADO EXPORTABLE:
+   - Botón "Ver listado" abre modal con tabla
+   - Columnas: Nombre, Días disponibles, usados, restantes, 1ª Franja, 2ª Franja
+   - Botón "Exportar CSV"
+   - Botón "Importar CSV"
+   - Botón "Imprimir" (optimizado para papel)
+
+6. REGLAS DE VALIDACIÓN:
+   - Período: 01/12/2026 al 30/06/2027
+   - Máximo 3 personas simultáneamente
+   - Feriados argentinos (Inmaculada Concepción, Noche Buena, Navidad, Año Viejo, Año Nuevo, Carnaval, Día de la Memoria, Viernes Santo, Día del Veterano, Día del Trabajador, Día de la Revolución de Mayo, Paso a la Inmortalidad de Belgrano)
+   - No se pueden tomar más días de los disponibles
+
+7. DISEÑO:
+   - Tema oscuro institucional
+   - Logo "ETAC" destacado
+   - Colores: azul (#2b6cb0), verde (#2f855a), rojo (#c53030), fondo oscuro (#1a202c)
+   - Responsive (funciona en móvil y PC)
+   - Aviso de autoría: "© 2026 Maldonado Jorge Matias - Todos los derechos reservados"
+
+8. ARCHIVOS:
+   - index.html (todo en uno: HTML + CSS + JS)
+   - styles.css (estilos por separado)
+   - app.js (lógica por separado)
+
+Restricciones:
+- Todos los textos en español
+- Funciona con doble clic en index.html
+- Datos guardados en localStorage
+- Se puede compartir por WhatsApp (un solo archivo)
+
+Diseñado por: Maldonado Jorge Matias</pre>
+    </div>
+
+    <div class="footer">
+        <p><strong>ETAC - Guardia A - BASE PUNILLA</strong></p>
+        <p>Cronograma de Licencia Anual - Instructivo Completo del Proyecto</p>
+        <p><strong>Diseñado por: Maldonado Jorge Matias</strong></p>
+        <p>Documento generado el 12/10/2026</p>
+    </div>
+
+</body>
+</html>
